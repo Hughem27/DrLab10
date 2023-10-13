@@ -2,9 +2,7 @@
 function Create() {
     return (
         <div>
-            <h1>Hello World</h1>
-
-            <h2>This is Create</h2>
+            <h3>Hello World this is Create</h3>
 
 
 
