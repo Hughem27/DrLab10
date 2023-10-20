@@ -11,18 +11,15 @@ function Create() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log("Title: "+title+    //  Displaying our values to console to ensure they've been taken
-        " Cover: "+cover+
-        " Author: "+author);
-
-
+        console.log("Title: " + title +    //  Displaying our values to console to ensure they've been taken
+            " Cover: " + cover +
+            " Author: " + author);
     }
-
 
     return (
         <div>
             <h3>Hello World this is Create</h3>
-            <form onSubmit={handleSubmit}>  
+            <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     {/* Label To prompt user to input title */}
                     <label >Edit Book Title: </label>
