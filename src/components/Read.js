@@ -1,51 +1,38 @@
 //  Read Component 
 
 import Books from "./Books";
+import { useEffect, useState } from 'react';
+import axios from "axios";
 
 function Read() {
 
-    const data = [
-        {
-        "title": "Learn Git in a Month of Lunches",
-        "isbn": "1617292419",
-        "pageCount": 0,
-        "thumbnailUrl":"https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/umali.jpg", //  When taking from pdf make sure one line and get rid of arrow
-        "status": "MEAP",
-        "authors": ["Rick Umali"],
-        "categories": []
-        },
-        {
-        "title": "MongoDB in Action, Second Edition",
-        "isbn": "1617291609",
-        "pageCount": 0,
-        "thumbnailUrl":"https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/banker2.jpg",   //  When taking from pdf make sure one line and get rid of arrow
-        "status": "MEAP",
-        "authors": [
-        "Kyle Banker",
-        "Peter Bakkum",
-        "Tim Hawkins",
-        "Shaun Verch",
-        "Douglas Garrett"
-        ],
-        "categories": []
-        },
-        {
-        "title": "Getting MEAN with Mongo, Express, Angular, and Node",
-        "isbn": "1617292036",
-        "pageCount": 0,
-        "thumbnailUrl":"https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/sholmes.jpg",   //  When taking from pdf make sure one line and get rid of arrow
-        "status": "MEAP",
-        "authors": ["Simon Holmes"],
-        "categories": []
-        }
-        ];
+    const [data, setData] = useState([]);   // useState() docs. => https://react.dev/reference/react/useState
+
+    useEffect(() => {
+        axios.get('https://jsonblob.com/api/jsonblob/1161593332966481920')  //  Generate request
+            .then(          //  What we do with what comes back
+                (response) => {
+                    setData(response.data.books)    //  response.data.books to get specifically whats between books=[]
+                    //  Setting our const data to the response, rather then hardcoding it in
+                }
+
+            )
+            .catch(
+                (error) => {
+                    console.log(error); //  Incase of an Error that it will display in console log
+                });
+            },[]
+
+    )
 
 
     return (
         <div>
             <h3>Hello World this is Read</h3>
             {/* Importing books */}
-            <Books myBooks= {data}></Books> 
+            <Books myBooks={data}></Books>
+
+
 
 
         </div>

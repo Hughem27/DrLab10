@@ -19,7 +19,7 @@ function App() {
       <div className="App">
         {/* This is the navbar taken from bootstrap, we're using router dom here*/}
         {/* This is the actual NavBar itself */}
-        <Navbar bg="primary" data-bs-theme="dark">
+        <Navbar bg="secondary" data-bs-theme="dark">
           <Container>
             <Navbar.Brand href="home">Navbar</Navbar.Brand>
             <Nav className="me-auto">
