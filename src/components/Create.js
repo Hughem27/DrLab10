@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 
@@ -14,11 +15,23 @@ function Create() {
         console.log("Title: " + title +    //  Displaying our values to console to ensure they've been taken
             " Cover: " + cover +
             " Author: " + author);
+
+            //  To let book have data so it can be sent
+            const book = {
+                title:title,
+                cover:cover,
+                author:author
+            }
+
+            //  Talking HTTP to post data to server
+            axios.post('http://localhost:4000/api/book', book)
+            .then()
+            .catch();
     }
 
     return (
         <div>
-            <h3>Hello World this is Create</h3>
+            <h3>Create</h3>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     {/* Label To prompt user to input title */}
