@@ -12,7 +12,7 @@ function Read() {
         axios.get('http://localhost:4000/api/books')  //  Generate request
             .then(          //  What we do with what comes back
                 (response) => {
-                    setData(response.data.myBooks)    //  response.data.books to get specifically whats between books=[]
+                    setData(response.data)    //  response.data.books to get specifically whats between books=[]
                     //  Setting our const data to the response, rather then hardcoding it in
                 }
 

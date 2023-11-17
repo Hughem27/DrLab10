@@ -1,6 +1,20 @@
 //  npm install express --save (Beginning)
 //  npm i body-parser     _For post etc  
 
+//  To add this as new rremote repo 
+//  #region 
+    
+
+    //  git remote rm origin
+    //  git init
+    //  git add .
+    //  git commit -m "Lab 6 Complete - Server and client talking"
+    //  git branch -M main
+    //  git remote rm origin
+    //  git remote add origin https://github.com/Hughem27/DRLab6.git
+    //  git push -u origin main
+    //#endregion
+
 //  Implementing Express
 const express = require('express')
 const app = express()
@@ -26,9 +40,46 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
+// getting-started.js
+const mongoose = require('mongoose');
+
+main().catch(err => console.log(err));
+
+async function main() {
+    //  If you want to name the db, do it after the /                            \/
+  await mongoose.connect('mongodb+srv://admin:admin@cluster0.qlluokg.mongodb.net/?retryWrites=true&w=majority');
+
+  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+}
+
+//  Adding a new schema to follow so the data is structured
+const bookSchema = new mongoose.Schema({
+    title:String,
+    cover:String,
+    author:String,
+})
+
+//  Creating a new object so it can be called to query / edit data
+const bookModel = mongoose.model('book_collection', bookSchema);
+
+
+
+//  Post method to display data received
 app.post('/api/book', (req,res)=> {
     console.log(req.body);
-    res.send("Data Received");
+
+    //  Creating a new book
+    bookModel.create({
+        title:req.body.title,
+        cover:req.body.cover,
+        author:req.body.author,
+    })
+    //  Always send back to client otherwise it will try to keep the connection open and time out
+    .then(()=> {
+        res.send("Book not created");})
+    .catch(()=>{res.send("Book not created");    })
+
+    
 });
 
 // Res = response req = request
@@ -36,58 +87,21 @@ app.get('/', (req, res) => {
     res.send('Welcome to Data Representation & Querying')
 })
 
-//  Changed our API ocation to our server on localhost:4000
-app.get('/api/books', (req, res) => {
-
-    const books = [
-        {
-            "title": "Learn Git in a Month of Lunches",
-            "isbn": "1617292419",
-            "pageCount": 0,
-            "thumbnailUrl":
-                "https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/umali.jpg", "authors": ["Rick Umali"],
-            "categories": []
-        },
-        {
-            "title": "MongoDB in Action, Second Edition",
-            "isbn": "1617291609",
-            "pageCount": 0,
-            "thumbnailUrl":
-                "https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/banker2.jpg",
-            "status": "MEAP",
-            "authors": [
-                "Kyle Banker",
-                "Peter Bakkum",
-                "Tim Hawkins",
-                "Shaun Verch",
-                "Douglas Garrett"
-            ],
-            "categories": []
-
-        },
-        {
-            "title": "Getting MEAN with Mongo, Express, Angular, and Node",
-            "isbn": "1617292036",
-            "pageCount": 0,
-            "thumbnailUrl":
-                "https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/sholmes.jpg",
-            "status": "MEAP",
-            "authors": ["Simon Holmes"],
-            "categories": []
-        }
-    ];
+//  Using async instead of .then . catch
+app.get('/api/books', async(req, res) => {
+    
+    //  Returning all books (await means it doesn't execute past that line till it has returned)
+    let books = await bookModel.find({});
+    res.json(books);
 
 
+})
 
-    res.json({
-        myBooks: books,
-        "Message": "Some info",
-        "Status": "Happy"
+app.get('/api/book/:id',async(req,res)=>{
+    console.log(req.params.id);
 
-    })
-
-
-
+    let book = await bookModel.findById(req.params.id);
+    res.send(book);
 })
 
 

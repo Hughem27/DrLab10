@@ -10,7 +10,7 @@ import BookItems from "./bookItems";
 
             (book)=>{
                 // Each item (book) in my book array is returning bookitem
-                return <BookItems myBook={book} key={book.isbn}></BookItems>
+                return <BookItems myBook={book} key={book._id}></BookItems>
             }
         );
     }   
