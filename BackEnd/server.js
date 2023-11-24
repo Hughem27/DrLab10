@@ -10,7 +10,7 @@
     //  git add .
     //  git commit -m "Lab 6 Complete - Server and client talking"
     //  git branch -M main
-    //  git remote rm origin
+    //  git remote rm  origin
     //  git remote add origin https://github.com/Hughem27/DRLab6.git
     //  git push -u origin main
     //#endregion
@@ -62,6 +62,14 @@ const bookSchema = new mongoose.Schema({
 //  Creating a new object so it can be called to query / edit data
 const bookModel = mongoose.model('book_collection', bookSchema);
 
+//  using a .put to update the book
+app.put('/api/book/:id', async(req,res)=>{
+    console.log('Update: '+req.params.id);
+
+    let book = await bookModel.findByIdAndUpdate(req.params.id, req.body, {new:true});
+    res.send(book);
+
+})
 
 
 //  Post method to display data received

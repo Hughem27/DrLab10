@@ -1,4 +1,5 @@
 import Card from 'react-bootstrap/Card';
+import { Link } from 'react-router-dom';
 
 //  Function to show books, to be embeded within read
 function BookItems(props) {    
@@ -17,6 +18,7 @@ function BookItems(props) {
                         </footer>
                     </blockquote>
                 </Card.Body>
+                <Link to={'/edit/'+props.myBook._id} className='btn btn-primary'> Edit </Link>
             </Card>
 
 
