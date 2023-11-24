@@ -18,6 +18,7 @@ function BookItems(props) {
                         </footer>
                     </blockquote>
                 </Card.Body>
+                {/* Link is to use the edit function, we're then adding on the id to edit a specific book */}
                 <Link to={'/edit/'+props.myBook._id} className='btn btn-primary'> Edit </Link>
             </Card>
 
