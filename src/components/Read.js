@@ -21,16 +21,32 @@ function Read() {
                 (error) => {
                     console.log(error); //  Incase of an Error that it will display in console log
                 });
-            },[]
+    }, []
 
     )
+
+    //  To reload the page when a change has been made via book deleted
+    const Reload = (e) => {
+        axios.get('http://localhost:4000/api/books')  //  Generate request
+            .then(          //  What we do with what comes back
+                (response) => {
+                    setData(response.data)    //  response.data.books to get specifically whats between books=[]
+                    //  Setting our const data to the response, rather then hardcoding it in
+                }
+
+            )
+            .catch(
+                (error) => {
+                    console.log(error); //  Incase of an Error that it will display in console log
+                });
+    }
 
 
     return (
         <div>
             <h3>Hello World this is Read</h3>
             {/* Importing books */}
-            <Books myBooks={data}></Books>
+            <Books myBooks={data} ReloadData={Reload}></Books>
 
 
 

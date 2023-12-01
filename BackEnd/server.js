@@ -71,6 +71,15 @@ app.put('/api/book/:id', async(req,res)=>{
 
 })
 
+app.delete('/api/book/:id', async(req,res)=>{
+    console.log('Delete: '+req.params.id);
+    
+    //  Deleting by ID
+    let book = await bookModel.findByIdAndDelete(req.params.id);
+    res.send(book); //  Sending back a response for the sake of it
+
+})
+
 
 //  Post method to display data received
 app.post('/api/book', (req,res)=> {
