@@ -3,17 +3,22 @@
 
 //  To add this as new rremote repo 
 //  #region 
-    
 
-    //  git remote rm origin
-    //  git init
-    //  git add .
-    //  git commit -m "Lab 6 Complete - Server and client talking"
-    //  git branch -M main
-    //  git remote rm  origin
-    //  git remote add origin https://github.com/Hughem27/DRLab6.git
-    //  git push -u origin main
-    //#endregion
+
+//  git remote rm origin
+//  git init
+//  git add .
+//  git commit -m "Lab 6 Complete - Server and client talking"
+//  git branch -M main
+//  git remote rm  origin
+//  git remote add origin https://github.com/Hughem27/DRLab6.git
+//  git push -u origin main
+//#endregion
+
+//Horoku deployment server
+//netify
+
+//  Comment out /build in .gitignore to upload to git
 
 //  Implementing Express
 const express = require('express')
@@ -25,14 +30,28 @@ const port = 4000   //   4000 because client = 30000
 const cors = require('cors');
 
 //  Implementing Cors
-app.use(cors());
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use(cors());
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//     res.header("Access-Control-Allow-Headers",
+//         "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
+
+// Commented Cors as its not in use as build folder
+
+
+//     npm run build
+// Server Changes
+//server.js
+//add just under import section at the top of server,js
+// Serve the static files from the React app
+//  Have it below where app defined (const app = ...)
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../build')));
+app.use('/static', express.static(path.join(__dirname, 'build//static')));
+
 
 //  body parser
 const bodyParser = require('body-parser');
@@ -47,33 +66,33 @@ main().catch(err => console.log(err));
 
 async function main() {
     //  If you want to name the db, do it after the /                            \/
-  await mongoose.connect('mongodb+srv://admin:admin@cluster0.qlluokg.mongodb.net/?retryWrites=true&w=majority');
+    await mongoose.connect('mongodb+srv://admin:admin@cluster0.qlluokg.mongodb.net/?retryWrites=true&w=majority');
 
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+    // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
 
 //  Adding a new schema to follow so the data is structured
 const bookSchema = new mongoose.Schema({
-    title:String,
-    cover:String,
-    author:String,
+    title: String,
+    cover: String,
+    author: String,
 })
 
 //  Creating a new object so it can be called to query / edit data
 const bookModel = mongoose.model('book_collection', bookSchema);
 
 //  using a .put to update the book
-app.put('/api/book/:id', async(req,res)=>{
-    console.log('Update: '+req.params.id);
+app.put('/api/book/:id', async (req, res) => {
+    console.log('Update: ' + req.params.id);
 
-    let book = await bookModel.findByIdAndUpdate(req.params.id, req.body, {new:true});
+    let book = await bookModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.send(book);
 
 })
 
-app.delete('/api/book/:id', async(req,res)=>{
-    console.log('Delete: '+req.params.id);
-    
+app.delete('/api/book/:id', async (req, res) => {
+    console.log('Delete: ' + req.params.id);
+
     //  Deleting by ID
     let book = await bookModel.findByIdAndDelete(req.params.id);
     res.send(book); //  Sending back a response for the sake of it
@@ -82,21 +101,22 @@ app.delete('/api/book/:id', async(req,res)=>{
 
 
 //  Post method to display data received
-app.post('/api/book', (req,res)=> {
+app.post('/api/book', (req, res) => {
     console.log(req.body);
 
     //  Creating a new book
     bookModel.create({
-        title:req.body.title,
-        cover:req.body.cover,
-        author:req.body.author,
+        title: req.body.title,
+        cover: req.body.cover,
+        author: req.body.author,
     })
-    //  Always send back to client otherwise it will try to keep the connection open and time out
-    .then(()=> {
-        res.send("Book not created");})
-    .catch(()=>{res.send("Book not created");    })
+        //  Always send back to client otherwise it will try to keep the connection open and time out
+        .then(() => {
+            res.send("Book not created");
+        })
+        .catch(() => { res.send("Book not created"); })
 
-    
+
 });
 
 // Res = response req = request
@@ -105,8 +125,8 @@ app.get('/', (req, res) => {
 })
 
 //  Using async instead of .then . catch
-app.get('/api/books', async(req, res) => {
-    
+app.get('/api/books', async (req, res) => {
+
     //  Returning all books (await means it doesn't execute past that line till it has returned)
     let books = await bookModel.find({});
     res.json(books);
@@ -114,12 +134,19 @@ app.get('/api/books', async(req, res) => {
 
 })
 
-app.get('/api/book/:id',async(req,res)=>{
+app.get('/api/book/:id', async (req, res) => {
     console.log(req.params.id);
 
     let book = await bookModel.findById(req.params.id);
     res.send(book);
 })
+
+//add at the bottom just over app.listen
+// Handles any requests that don't match the ones above
+//  * covers all urls
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/../build/index.html'));
+});
 
 
 // Listener on port
